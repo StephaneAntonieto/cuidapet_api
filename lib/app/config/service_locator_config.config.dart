@@ -12,8 +12,11 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
 import '../../modules/user/controller/auth_controller.dart' as _i477;
+import '../../modules/user/data/i_user_repository.dart' as _i872;
+import '../../modules/user/data/i_user_repository_impl.dart' as _i1014;
 import '../database/database_connection_impl.dart' as _i311;
 import '../database/i_database_connection.dart' as _i77;
+import '../logger/i_logger.dart' as _i742;
 import 'database_connection_configuration.dart' as _i32;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -31,6 +34,10 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i77.IDatabaseConnection>(() =>
         _i311.DatabaseConnectionImpl(
             gh<_i32.DatabaseConnectionConfiguration>()));
+    gh.lazySingleton<_i872.IUserRepository>(() => _i1014.IUserRepositoryImpl(
+          connection: gh<_i77.IDatabaseConnection>(),
+          log: gh<_i742.ILogger>(),
+        ));
     return this;
   }
 }
