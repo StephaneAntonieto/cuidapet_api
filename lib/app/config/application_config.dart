@@ -5,7 +5,7 @@ import "package:get_it/get_it.dart";
 
 import "package:cuidapet_api/app/config/database_connection_configuration.dart";
 import "package:cuidapet_api/app/logger/i_logger.dart";
-import "package:cuidapet_api/app/logger/logger_impl.dart";
+import "package:cuidapet_api/app/logger/logger.dart";
 import "package:shelf_router/shelf_router.dart";
 
 class ApplicationConfig {
@@ -30,7 +30,7 @@ class ApplicationConfig {
   }
 
   void _configLogger() =>
-      GetIt.I.registerLazySingleton<ILogger>(() => LoggerImpl());
+      GetIt.I.registerLazySingleton<ILogger>(() => Logger());
 
   void _loadDependencies() => configureDependencies();
 

@@ -10,11 +10,11 @@ import 'package:mysql1/mysql1.dart';
 import './i_user_repository.dart';
 
 @LazySingleton(as: IUserRepository)
-class IUserRepositoryImpl implements IUserRepository {
+class UserRepository implements IUserRepository {
   final IDatabaseConnection connection;
   final ILogger log;
 
-  IUserRepositoryImpl({
+  UserRepository({
     required this.connection,
     required this.log,
   });

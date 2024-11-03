@@ -5,10 +5,10 @@ import 'package:cuidapet_api/app/database/i_database_connection.dart';
 import 'package:cuidapet_api/app/config/database_connection_configuration.dart';
 
 @LazySingleton(as: IDatabaseConnection)
-class DatabaseConnectionImpl implements IDatabaseConnection {
+class DatabaseConnection implements IDatabaseConnection {
   final DatabaseConnectionConfiguration _configuration;
 
-  DatabaseConnectionImpl(this._configuration);
+  DatabaseConnection(this._configuration);
 
   @override
   Future<MySqlConnection> openConnection() {
