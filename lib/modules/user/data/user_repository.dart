@@ -21,14 +21,13 @@ class UserRepository implements IUserRepository {
 
   @override
   Future<User> createUser(User user) async {
-    late final MySqlConnection? conn;
+    MySqlConnection? conn;
 
     try {
       conn = await connection.openConnection();
-      final query = '''
-        insert usuario(email, tipo_cadastro, img_avatar, senha, fornecedor_id, social_id)
-        values(?,?,?,?,?,?)      
-      ''';
+
+      final query =
+          '''insert usuario(email,tipo_cadastro,img_avatar,senha,fornecedor_id,social_id) values(?,?,?,?,?,?)''';
       final result = await conn.query(query, [
         user.email,
         user.registerType,
