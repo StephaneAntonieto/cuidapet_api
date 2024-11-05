@@ -12,6 +12,7 @@ import 'package:cuidapet_api/app/middlewares/security/security_skip_url.dart';
 class SecurityMiddleware extends Middlewares {
   final ILogger log;
   final skipUrl = <SecuritySkipUrl>[
+    SecuritySkipUrl(url: '/auth/', method: 'POST'),
     SecuritySkipUrl(url: '/auth/register', method: 'POST')
   ];
 
