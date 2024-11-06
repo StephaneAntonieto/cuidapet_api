@@ -40,6 +40,7 @@ class AuthController {
           loginViewModel.supplierUser,
         );
       } else {
+        //Update
         user = await userService.loginWithSocial(
           loginViewModel.login,
           loginViewModel.avatar,
