@@ -46,10 +46,11 @@ class SecurityMiddleware extends Middlewares {
       }
 
       final claimsMap = claims.toJson();
+
       final userId = claimsMap['sub'];
       final supplierId = claimsMap['supplier'];
 
-      if (userId != null) {
+      if (userId == null) {
         throw JwtException.invalidToken;
       }
 
