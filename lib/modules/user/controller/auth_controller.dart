@@ -40,8 +40,12 @@ class AuthController {
           loginViewModel.supplierUser,
         );
       } else {
-        // Social login a implementar
-        user = User();
+        user = await userService.loginWithSocial(
+          loginViewModel.login,
+          loginViewModel.avatar,
+          loginViewModel.socialType,
+          loginViewModel.socialKey,
+        );
       }
 
       return Response.ok(
