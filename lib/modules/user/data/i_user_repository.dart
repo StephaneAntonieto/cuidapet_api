@@ -14,4 +14,5 @@ abstract interface class IUserRepository {
   );
   Future<void> updateUserDeviceTokenAndRefreshToken(User user);
   Future<void> updateRefreshToken(User user);
+  Future<User> findById(int id);
 }
