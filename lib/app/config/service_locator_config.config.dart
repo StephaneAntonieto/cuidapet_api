@@ -11,6 +11,11 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
+import '../../modules/categories/controller/categories_controller.dart' as _i55;
+import '../../modules/categories/data/categories_repository.dart' as _i537;
+import '../../modules/categories/data/i_categories_repository.dart' as _i870;
+import '../../modules/categories/service/categories_service.dart' as _i805;
+import '../../modules/categories/service/i_categories_service.dart' as _i803;
 import '../../modules/user/controller/auth_controller.dart' as _i477;
 import '../../modules/user/controller/user_controller.dart' as _i983;
 import '../../modules/user/data/i_user_repository.dart' as _i872;
@@ -33,8 +38,12 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
+    gh.factory<_i55.CategoriesController>(() => _i55.CategoriesController());
+    gh.lazySingleton<_i803.ICategoriesService>(() => _i805.CategoriesService());
     gh.lazySingleton<_i77.IDatabaseConnection>(() =>
         _i396.DatabaseConnection(gh<_i32.DatabaseConnectionConfiguration>()));
+    gh.lazySingleton<_i870.ICategoriesRepository>(
+        () => _i537.CategoriesRepository());
     gh.lazySingleton<_i872.IUserRepository>(() => _i755.UserRepository(
           connection: gh<_i77.IDatabaseConnection>(),
           log: gh<_i742.ILogger>(),
