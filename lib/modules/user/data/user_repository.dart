@@ -5,6 +5,7 @@ import 'package:cuidapet_api/app/exceptions/user_notfound_exception.dart';
 import 'package:cuidapet_api/app/helpers/cripty_helper.dart';
 import 'package:cuidapet_api/app/logger/i_logger.dart';
 import 'package:cuidapet_api/entities/user.dart';
+import 'package:cuidapet_api/modules/user/view_models/platform.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mysql1/mysql1.dart';
 
@@ -266,6 +267,31 @@ class UserRepository implements IUserRepository {
           'update usuario set img_avatar = ? where id = ?', [urlAvatar, id]);
     } on MySqlException catch (e, s) {
       log.error('Erro ao atualizar avatar', e, s);
+      throw DatabaseException();
+    } finally {
+      await conn?.close();
+    }
+  }
+
+  @override
+  Future<void> updateDeviceToken(
+      int id, String token, Platform platform) async {
+    MySqlConnection? conn;
+    try {
+      conn = await connection.openConnection();
+      var set = '';
+
+      if (platform == Platform.ios) {
+        set = 'ios_token = ?';
+      } else {
+        set = 'android_token = ?';
+      }
+
+      final query = 'update usuario set $set where id = ?';
+
+      await conn.query(query, [token, id]);
+    } on MySqlException catch (e, s) {
+      log.error('Erro ao atualizar device token', e, s);
       throw DatabaseException();
     } finally {
       await conn?.close();
