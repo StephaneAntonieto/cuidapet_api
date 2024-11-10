@@ -16,6 +16,11 @@ import '../../modules/categories/data/categories_repository.dart' as _i537;
 import '../../modules/categories/data/i_categories_repository.dart' as _i870;
 import '../../modules/categories/service/categories_service.dart' as _i805;
 import '../../modules/categories/service/i_categories_service.dart' as _i803;
+import '../../modules/supplier/controller/supplier_controller.dart' as _i331;
+import '../../modules/supplier/data/i_supplier_repository.dart' as _i417;
+import '../../modules/supplier/data/supplier_repository.dart' as _i151;
+import '../../modules/supplier/service/i_supplier_service.dart' as _i448;
+import '../../modules/supplier/service/supplier_service.dart' as _i977;
 import '../../modules/user/controller/auth_controller.dart' as _i477;
 import '../../modules/user/controller/user_controller.dart' as _i983;
 import '../../modules/user/data/i_user_repository.dart' as _i872;
@@ -38,8 +43,12 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
+    gh.factory<_i331.SupplierController>(() => _i331.SupplierController());
+    gh.lazySingleton<_i417.ISupplierRepository>(
+        () => _i151.SupplierRepository());
     gh.lazySingleton<_i77.IDatabaseConnection>(() =>
         _i396.DatabaseConnection(gh<_i32.DatabaseConnectionConfiguration>()));
+    gh.lazySingleton<_i448.ISupplierService>(() => _i977.SupplierService());
     gh.lazySingleton<_i870.ICategoriesRepository>(
         () => _i537.CategoriesRepository(
               connection: gh<_i77.IDatabaseConnection>(),
