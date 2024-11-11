@@ -20,7 +20,7 @@ class SupplierRepository implements ISupplierRepository {
   });
 
   @override
-  Future<List<SupplierNearbyMeDto>> findNearByPosition(
+  Future<List<SupplierNearbyMeDTO>> findNearByPosition(
       double lat, double lng, int distance) async {
     MySqlConnection? conn;
 
@@ -44,7 +44,7 @@ class SupplierRepository implements ISupplierRepository {
       final result = await conn.query(query);
       return result
           .map(
-            (f) => SupplierNearbyMeDto(
+            (f) => SupplierNearbyMeDTO(
                 id: f['id'],
                 name: f['nome'],
                 logo: (f['logo'] as Blob?)?.toString(),

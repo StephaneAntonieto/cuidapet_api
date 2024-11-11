@@ -1,12 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-class SupplierNearbyMeDto {
+class SupplierNearbyMeDTO {
   final int id;
   final String name;
   final String? logo;
   final double distance;
   final int categoryId;
 
-  SupplierNearbyMeDto({
+  SupplierNearbyMeDTO({
     required this.id,
     required this.name,
     this.logo,
