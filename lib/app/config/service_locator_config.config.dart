@@ -43,12 +43,12 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
-    gh.factory<_i331.SupplierController>(() => _i331.SupplierController());
-    gh.lazySingleton<_i417.ISupplierRepository>(
-        () => _i151.SupplierRepository());
     gh.lazySingleton<_i77.IDatabaseConnection>(() =>
         _i396.DatabaseConnection(gh<_i32.DatabaseConnectionConfiguration>()));
-    gh.lazySingleton<_i448.ISupplierService>(() => _i977.SupplierService());
+    gh.lazySingleton<_i417.ISupplierRepository>(() => _i151.SupplierRepository(
+          connection: gh<_i77.IDatabaseConnection>(),
+          log: gh<_i742.ILogger>(),
+        ));
     gh.lazySingleton<_i870.ICategoriesRepository>(
         () => _i537.CategoriesRepository(
               connection: gh<_i77.IDatabaseConnection>(),
@@ -62,12 +62,18 @@ extension GetItInjectableX on _i174.GetIt {
           userRepository: gh<_i872.IUserRepository>(),
           log: gh<_i742.ILogger>(),
         ));
+    gh.lazySingleton<_i448.ISupplierService>(() =>
+        _i977.SupplierService(repository: gh<_i417.ISupplierRepository>()));
     gh.factory<_i477.AuthController>(() => _i477.AuthController(
           userService: gh<_i610.IUserService>(),
           log: gh<_i742.ILogger>(),
         ));
     gh.factory<_i983.UserController>(() => _i983.UserController(
           userService: gh<_i610.IUserService>(),
+          log: gh<_i742.ILogger>(),
+        ));
+    gh.factory<_i331.SupplierController>(() => _i331.SupplierController(
+          service: gh<_i448.ISupplierService>(),
           log: gh<_i742.ILogger>(),
         ));
     gh.lazySingleton<_i803.ICategoriesService>(() =>
