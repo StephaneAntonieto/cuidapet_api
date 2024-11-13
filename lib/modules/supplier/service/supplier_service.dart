@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cuidapet_api/entities/supplier.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:cuidapet_api/dtos/supplier_nearby_me_dto.dart';
@@ -19,4 +20,7 @@ class SupplierService implements ISupplierService {
   @override
   Future<List<SupplierNearbyMeDTO>> findNearByMe(double lat, double lng) =>
       repository.findNearByPosition(lat, lng, DISTANCE);
+
+  @override
+  Future<Supplier?> findById(int id) => repository.findById(id);
 }

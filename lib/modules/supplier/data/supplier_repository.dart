@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cuidapet_api/app/exceptions/database_exception.dart';
+import 'package:cuidapet_api/entities/category.dart';
+import 'package:cuidapet_api/entities/supplier.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:cuidapet_api/app/database/i_database_connection.dart';
@@ -54,6 +56,53 @@ class SupplierRepository implements ISupplierRepository {
           .toList();
     } on MySqlException catch (e, s) {
       log.error('Erro ao buscar fornecedores por posicao', e, s);
+      throw DatabaseException();
+    } finally {
+      await conn?.close();
+    }
+  }
+
+  @override
+  Future<Supplier?> findById(int id) async {
+    MySqlConnection? conn;
+
+    try {
+      conn = await connection.openConnection();
+
+      final query = '''
+        select
+          f.id, f.nome, f.logo, f.endereco, f.telefone, ST_X(f.latlng) as lat, ST_Y(f.latlng) as lng,
+          f.categorias_fornecedor_id, c.nome_categoria, c.tipo_categoria
+        from fornecedor as f
+          inner join categorias_fornecedor as c on (f.categorias_fornecedor_id = c.id)
+        where
+          f.id = ?
+      ''';
+
+      final result = await conn.query(query, [id]);
+
+      if (result.isNotEmpty) {
+        final dataMysql = result.first;
+
+        return Supplier(
+          id: dataMysql['id'],
+          name: dataMysql['nome'],
+          logo: (dataMysql['logo'] as Blob?).toString(),
+          address: dataMysql['endereco'],
+          phone: dataMysql['telefone'],
+          lat: dataMysql['lat'],
+          lng: dataMysql['lng'],
+          category: Category(
+            id: dataMysql['categorias_fornecedor_id'],
+            name: dataMysql['nome_categoria'],
+            type: dataMysql['tipo_categoria'],
+          ),
+        );
+      }
+
+      return null;
+    } on MySqlException catch (e, s) {
+      log.error('Erro ao buscar fornecedores por id', e, s);
       throw DatabaseException();
     } finally {
       await conn?.close();
