@@ -29,4 +29,8 @@ class SupplierService implements ISupplierService {
   Future<List<entity.SupplierService>> findServicesBySupplierId(
           int supplierId) =>
       repository.findServicesBySupplierId(supplierId);
+
+  @override
+  Future<bool> checkUserEmailExists(String email) =>
+      repository.checkUserEmailExists(email);
 }
