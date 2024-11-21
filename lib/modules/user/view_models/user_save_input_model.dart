@@ -5,7 +5,13 @@ class UserSaveInputModel extends RequestMapping {
   late String password;
   int? supplierId;
 
-  UserSaveInputModel(super.dataRequest);
+  UserSaveInputModel({
+    required this.email,
+    required this.password,
+    this.supplierId,
+  }) : super.empty();
+
+  UserSaveInputModel.requestMapping(super.dataRequest);
 
   @override
   void map() {
