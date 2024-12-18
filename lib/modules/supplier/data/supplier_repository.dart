@@ -188,4 +188,55 @@ class SupplierRepository implements ISupplierRepository {
       await conn?.close();
     }
   }
+
+  @override
+  Future<Supplier> update(Supplier supplier) async {
+    MySqlConnection? conn;
+    try {
+      conn = await connection.openConnection();
+
+      await conn.query('''
+        update fornecedor
+          set
+            nome = ?,
+            logo = ?,
+            endereco = ?,
+            telefone = ?,
+            latlng = ST_GeomFromText(?),
+            categorias_fornecedor_id = ?
+        where
+          id = ?
+      ''', [
+        supplier.name,
+        supplier.logo,
+        supplier.address,
+        supplier.phone,
+        'POINT(${supplier.lat ?? 0} ${supplier.lng ?? 0})',
+        supplier.category?.id,
+        supplier.id
+      ]);
+
+      Category? category;
+      final categoryId = supplier.category?.id;
+
+      if (categoryId != null) {
+        final resultCategory = await conn.query(
+            'select * from categorias_fornecedor where id = ?', [categoryId]);
+
+        var categoryData = resultCategory.first;
+
+        category = Category(
+          id: categoryData['id'],
+          name: categoryData['nome_categoria'],
+          type: categoryData['tipo_categoria'],
+        );
+      }
+      return supplier.copyWith(category: category);
+    } on MySqlException catch (e, s) {
+      log.error('Erro ao atualizar dados do fornecedor', e, s);
+      throw DatabaseException();
+    } finally {
+      await conn?.close();
+    }
+  }
 }

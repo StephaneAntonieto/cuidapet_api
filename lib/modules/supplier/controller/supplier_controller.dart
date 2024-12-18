@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:cuidapet_api/entities/supplier.dart';
 import 'package:cuidapet_api/modules/supplier/view_models/create_supplier_user_view_model.dart';
+import 'package:cuidapet_api/modules/supplier/view_models/supplier_update_input_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
@@ -111,6 +112,29 @@ class SupplierController {
       return Response.internalServerError(
           body: jsonEncode(
               {'message': 'Erro ao cadastrar um novo fornecedor e usuario'}));
+    }
+  }
+
+  @Route.put('/')
+  Future<Response> update(Request request) async {
+    try {
+      final supplier = int.tryParse(request.headers['supplier'] ?? '');
+
+      if (supplier == null) {
+        return Response(400,
+            body:
+                jsonEncode({'message': 'Codigo fornecedor nao pode ser nulo'}));
+      }
+
+      final model = SupplierUpdateInputModel(
+          supplierId: supplier, dataRequest: await request.readAsString());
+
+      final supplierResponse = await service.update(model);
+
+      return Response.ok(_supplierMapper(supplierResponse));
+    } catch (e, s) {
+      log.error('Erro ao atualizar fornecedor', e, s);
+      return Response.internalServerError();
     }
   }
 

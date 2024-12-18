@@ -5,8 +5,14 @@ import 'package:cuidapet_api/entities/supplier_service.dart';
 abstract interface class ISupplierRepository {
   Future<List<SupplierNearbyMeDTO>> findNearByPosition(
       double lat, double lng, int distance);
+
   Future<Supplier?> findById(int id);
+
   Future<List<SupplierService>> findServicesBySupplierId(int supplierId);
+
   Future<bool> checkUserEmailExists(String email);
+
   Future<int> saveSupplier(Supplier supplier);
+
+  Future<Supplier> update(Supplier model);
 }
