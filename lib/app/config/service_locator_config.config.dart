@@ -53,11 +53,8 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
-    gh.factory<_i194.ChatController>(() => _i194.ChatController());
-    gh.lazySingleton<_i189.IChatService>(() => _i51.ChatService());
     gh.lazySingleton<_i77.IDatabaseConnection>(() =>
         _i396.DatabaseConnection(gh<_i32.DatabaseConnectionConfiguration>()));
-    gh.lazySingleton<_i216.IChatRepository>(() => _i199.ChatRepository());
     gh.lazySingleton<_i417.ISupplierRepository>(() => _i151.SupplierRepository(
           connection: gh<_i77.IDatabaseConnection>(),
           log: gh<_i742.ILogger>(),
@@ -74,6 +71,10 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i701.IScheduleService>(() =>
         _i541.ScheduleService(repository: gh<_i411.IScheduleRepository>()));
     gh.lazySingleton<_i872.IUserRepository>(() => _i755.UserRepository(
+          connection: gh<_i77.IDatabaseConnection>(),
+          log: gh<_i742.ILogger>(),
+        ));
+    gh.lazySingleton<_i216.IChatRepository>(() => _i199.ChatRepository(
           connection: gh<_i77.IDatabaseConnection>(),
           log: gh<_i742.ILogger>(),
         ));
@@ -99,8 +100,14 @@ extension GetItInjectableX on _i174.GetIt {
           repository: gh<_i417.ISupplierRepository>(),
           userService: gh<_i610.IUserService>(),
         ));
+    gh.lazySingleton<_i189.IChatService>(
+        () => _i51.ChatService(repository: gh<_i216.IChatRepository>()));
     gh.factory<_i436.ScheduleController>(() => _i436.ScheduleController(
           service: gh<_i701.IScheduleService>(),
+          log: gh<_i742.ILogger>(),
+        ));
+    gh.factory<_i194.ChatController>(() => _i194.ChatController(
+          service: gh<_i189.IChatService>(),
           log: gh<_i742.ILogger>(),
         ));
     gh.factory<_i331.SupplierController>(() => _i331.SupplierController(
