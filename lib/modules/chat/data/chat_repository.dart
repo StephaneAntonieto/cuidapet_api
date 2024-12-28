@@ -1,4 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cuidapet_api/entities/chat.dart';
+import 'package:cuidapet_api/entities/device_token.dart';
+import 'package:cuidapet_api/entities/supplier.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mysql1/mysql1.dart';
 
@@ -35,6 +38,68 @@ class ChatRepository implements IChatRepository {
       return result.insertId!;
     } on MySqlException catch (e, s) {
       log.error('Erro ao iniciar chat', e, s);
+      throw DatabaseException();
+    } finally {
+      await conn?.close();
+    }
+  }
+
+  @override
+  Future<Chat?> findChatById(int chatId) async {
+    MySqlConnection? conn;
+
+    try {
+      conn = await connection.openConnection();
+      final query = '''
+        SELECT
+          c.id,
+          c.data_criacao,
+          c.status,
+          a.nome AS agendamento_nome,
+          a.nome_pet AS agendamento_nome_pet,
+          a.fornecedor_id,
+          a.usuario_id,
+          f.nome AS fornec_nome,
+          f.logo,
+          u.android_token AS user_android_token,
+          u.ios_token AS user_ios_token,
+          uf.android_token AS fornec_android_token,
+          uf.ios_token AS fornec_ios_token
+        FROM chats AS c
+          INNER JOIN agendamento a ON a.id = c.agendamento_id
+          INNER JOIN fornecedor f ON f.id = a.fornecedor_id
+          INNER JOIN usuario u ON u.id = a.usuario_id
+          INNER JOIN usuario uf ON uf.fornecedor_id = f.id
+        WHERE c.id = ?
+      ''';
+
+      final result = await conn.query(query, [chatId]);
+
+      if (result.isNotEmpty) {
+        final resultMysql = result.first;
+        return Chat(
+          id: resultMysql['id'],
+          status: resultMysql['status'],
+          name: resultMysql['agendamento_nome'],
+          petName: resultMysql['agendamento_nome_pet'],
+          supplier: Supplier(
+            id: resultMysql['fornecedor_id'],
+            name: resultMysql['fornec_nome'],
+          ),
+          user: resultMysql['usuario_id'],
+          userDeviceToken: DeviceToken(
+            android: (resultMysql['user_android_token'] as Blob?)?.toString(),
+            ios: (resultMysql['user_ios_token'] as Blob?)?.toString(),
+          ),
+          supplierDeviceToken: DeviceToken(
+            android: (resultMysql['fornec_android_token'] as Blob?)?.toString(),
+            ios: (resultMysql['fornec_ios_token'] as Blob?)?.toString(),
+          ),
+        );
+      }
+      return null;
+    } on MySqlException catch (e, s) {
+      log.error('Erro ao buscar dado por chat', e, s);
       throw DatabaseException();
     } finally {
       await conn?.close();

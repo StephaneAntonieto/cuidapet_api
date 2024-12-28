@@ -1,7 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:cuidapet_api/modules/chat/view_models/chat_notify_view_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
@@ -32,6 +32,13 @@ class ChatController {
       log.error('Erro ao iniciar chat', e, s);
       return Response.internalServerError();
     }
+  }
+
+  @Route.post('/notify')
+  Future<Response> notifyUser(Request request) async {
+    final model = ChatNotifyViewModel(await request.readAsString());
+
+    return Response.ok(jsonEncode(''));
   }
 
   Router get router => _$ChatControllerRouter(this);
