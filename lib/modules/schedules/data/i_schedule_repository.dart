@@ -6,4 +6,6 @@ abstract interface class IScheduleRepository {
   Future<void> changeStatus(String status, int scheduleId);
 
   Future<List<Schedule>> findAllSchedulesByUser(int userId);
+
+  Future<List<Schedule>> findAllSchedulesByUserSupplier(int userId);
 }
