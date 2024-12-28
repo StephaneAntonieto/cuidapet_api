@@ -16,6 +16,11 @@ import '../../modules/categories/data/categories_repository.dart' as _i537;
 import '../../modules/categories/data/i_categories_repository.dart' as _i870;
 import '../../modules/categories/service/categories_service.dart' as _i805;
 import '../../modules/categories/service/i_categories_service.dart' as _i803;
+import '../../modules/chat/controller/chat_controller.dart' as _i194;
+import '../../modules/chat/data/chat_repository.dart' as _i199;
+import '../../modules/chat/data/i_chat_repository.dart' as _i216;
+import '../../modules/chat/service/chat_service.dart' as _i51;
+import '../../modules/chat/service/i_chat_service.dart' as _i189;
 import '../../modules/schedules/controller/schedule_controller.dart' as _i436;
 import '../../modules/schedules/data/i_schedule_repository.dart' as _i411;
 import '../../modules/schedules/data/schedule_repository.dart' as _i451;
@@ -48,8 +53,11 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
+    gh.factory<_i194.ChatController>(() => _i194.ChatController());
+    gh.lazySingleton<_i189.IChatService>(() => _i51.ChatService());
     gh.lazySingleton<_i77.IDatabaseConnection>(() =>
         _i396.DatabaseConnection(gh<_i32.DatabaseConnectionConfiguration>()));
+    gh.lazySingleton<_i216.IChatRepository>(() => _i199.ChatRepository());
     gh.lazySingleton<_i417.ISupplierRepository>(() => _i151.SupplierRepository(
           connection: gh<_i77.IDatabaseConnection>(),
           log: gh<_i742.ILogger>(),
