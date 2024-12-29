@@ -15,7 +15,7 @@ abstract interface class IUserService {
   );
   Future<User> loginWithSocial(
     String email,
-    String avatar,
+    String? avatar,
     String socialType,
     String socialKey,
   );
