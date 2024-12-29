@@ -18,5 +18,10 @@ Router _$ChatControllerRouter(ChatController service) {
     r'/notify',
     service.notifyUser,
   );
+  router.add(
+    'GET',
+    r'/user',
+    service.findChatByUser,
+  );
   return router;
 }
