@@ -1,5 +1,5 @@
 # CuidaPet API
-CuidaPet API is a RESTful API built using the Shelf framework, designed to support both mobile and web applications. The API handles functionalities such as user management, pet services, and scheduling, leveraging the MVVM architecture and the GetIt state management library for clean and modular code. The data is persisted in a MySQL database. This project is part of the Flutter Academy, developed for learning purposes and to enhance skills in developing RESTful APIs using Dart and the Shelf framework.
+CuidaPet API is a RESTful API built using the Shelf framework, designed to support both mobile and web applications. The API handles functionalities such as user management, pet services, chat, and scheduling, leveraging the MVVM architecture and the GetIt state management library for clean and modular code. The data is persisted in a MySQL database. This project is part of the Flutter Academy, developed for learning purposes and to enhance skills in developing RESTful APIs using Dart and the Shelf framework.
 
 ## Features
 
@@ -18,6 +18,11 @@ CuidaPet API is a RESTful API built using the Shelf framework, designed to suppo
 
 - **Service Booking**: Schedule appointments for selected services.
 - **Appointment Management**: View, reschedule, or cancel appointments.
+
+### Chat
+
+- **Real-time Messaging**: Users can chat with pet care providers.
+- **Message History**: View past conversations with service providers.
 
 ### Administrator Features
 
@@ -46,6 +51,7 @@ Refer to the `db_model` directory for detailed information about the database sc
 - **Users**: Stores user information such as name, email, and password.
 - **Services**: Contains information about the pet services offered.
 - **Appointments**: Manages user bookings, including dates and service details.
+- **Messages**: Stores chat messages between users and service providers.
 
 ## Getting Started
 
