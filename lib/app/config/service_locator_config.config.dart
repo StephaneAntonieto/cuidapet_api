@@ -39,6 +39,7 @@ import '../../modules/user/service/i_user_service.dart' as _i610;
 import '../../modules/user/service/user_service.dart' as _i457;
 import '../database/database_connection.dart' as _i396;
 import '../database/i_database_connection.dart' as _i77;
+import '../facades/push_notification_facade.dart' as _i982;
 import '../logger/i_logger.dart' as _i742;
 import 'database_connection_configuration.dart' as _i32;
 
@@ -55,6 +56,8 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i77.IDatabaseConnection>(() =>
         _i396.DatabaseConnection(gh<_i32.DatabaseConnectionConfiguration>()));
+    gh.lazySingleton<_i982.PushNotificationFacade>(
+        () => _i982.PushNotificationFacade(log: gh<_i742.ILogger>()));
     gh.lazySingleton<_i417.ISupplierRepository>(() => _i151.SupplierRepository(
           connection: gh<_i77.IDatabaseConnection>(),
           log: gh<_i742.ILogger>(),
@@ -100,11 +103,13 @@ extension GetItInjectableX on _i174.GetIt {
           repository: gh<_i417.ISupplierRepository>(),
           userService: gh<_i610.IUserService>(),
         ));
-    gh.lazySingleton<_i189.IChatService>(
-        () => _i51.ChatService(repository: gh<_i216.IChatRepository>()));
     gh.factory<_i436.ScheduleController>(() => _i436.ScheduleController(
           service: gh<_i701.IScheduleService>(),
           log: gh<_i742.ILogger>(),
+        ));
+    gh.lazySingleton<_i189.IChatService>(() => _i51.ChatService(
+          repository: gh<_i216.IChatRepository>(),
+          pushNotificationFacade: gh<_i982.PushNotificationFacade>(),
         ));
     gh.factory<_i194.ChatController>(() => _i194.ChatController(
           service: gh<_i189.IChatService>(),
