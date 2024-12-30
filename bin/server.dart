@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:cuidapet_api/app/middlewares/cors/cors_middlewares.dart';
 import 'package:cuidapet_api/app/middlewares/defaultContentType/default_content_type.dart';
@@ -14,6 +15,11 @@ void main(List<String> args) async {
   final ip = InternetAddress.anyIPv4;
 
   final router = Router();
+
+  router.get(
+    '/health',
+    (Request request) => Response.ok(jsonEncode({'up': 'true'})),
+  );
 
   final appConfig = ApplicationConfig();
   appConfig.loadConfigApplication(router);
