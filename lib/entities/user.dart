@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 class User {
   final int? id;
   final String? email;
@@ -48,5 +47,35 @@ class User {
       imageAvatar: imageAvatar ?? this.imageAvatar,
       supplierId: supplierId ?? this.supplierId,
     );
+  }
+
+  @override
+  bool operator ==(covariant User other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id &&
+        other.email == email &&
+        other.password == password &&
+        other.registerType == registerType &&
+        other.iosToken == iosToken &&
+        other.androidToken == androidToken &&
+        other.refreshToken == refreshToken &&
+        other.socialKey == socialKey &&
+        other.imageAvatar == imageAvatar &&
+        other.supplierId == supplierId;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        email.hashCode ^
+        password.hashCode ^
+        registerType.hashCode ^
+        iosToken.hashCode ^
+        androidToken.hashCode ^
+        refreshToken.hashCode ^
+        socialKey.hashCode ^
+        imageAvatar.hashCode ^
+        supplierId.hashCode;
   }
 }
