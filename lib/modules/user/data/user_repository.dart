@@ -100,7 +100,7 @@ class UserRepository implements IUserRepository {
           iosToken: (userSqlData['ios_token'] as Blob?)?.toString(),
           androidToken: (userSqlData['android_token'] as Blob?)?.toString(),
           refreshToken: (userSqlData['refresh_token'] as Blob?)?.toString(),
-          imageAvatar: (userSqlData['img_token'] as Blob?)?.toString(),
+          imageAvatar: (userSqlData['img_avatar'] as Blob?)?.toString(),
           supplierId: userSqlData['fornecedor_id'],
         );
       }
