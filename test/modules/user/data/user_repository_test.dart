@@ -30,7 +30,7 @@ void main() {
       //Arrange
       final userId = 1;
       final userFixtureDB = FixtureReader.getJsonData(
-          'modules/user/data/fixture/find_by_id_success_fixture.json');
+          'modules/user/data/fixture/find_by_id_success.json');
       final mockResults = MockResults(userFixtureDB, [
         'ios_token',
         'android_token',
@@ -132,7 +132,7 @@ void main() {
     test('Should login with email n password', () async {
       //Arrange
       final userFixtureDB = FixtureReader.getJsonData(
-          'modules/user/data/fixture/login_with_email_password_success_fixture.json');
+          'modules/user/data/fixture/login_with_email_password_success.json');
       final mockResults = MockResults(userFixtureDB, [
         'ios_token',
         'android_token',
@@ -145,7 +145,7 @@ void main() {
           mockResults, [email, CriptyHelper.generateSha256Hash(password)]);
       final userMap = jsonDecode(userFixtureDB);
       final userExpected = User(
-        id: userMap['id'] as int,
+        id: userMap['id'],
         email: userMap['email'],
         registerType: userMap['tipo_cadastro'],
         iosToken: userMap['ios_token'],
@@ -200,6 +200,135 @@ void main() {
       expect(() => call(email, password, false),
           throwsA(isA<DatabaseException>()));
       await Future.delayed(Duration(seconds: 1));
+      database.verifyConnectionClose();
+    });
+  });
+
+  group('Group test loginByEmailSocialKey', () {
+    test('Should login with email n social key with success', () async {
+      //Arrange
+      final userFixtureDB = FixtureReader.getJsonData(
+          'modules/user/data/fixture/login_with_email_social_key.json');
+      final mockResults = MockResults(userFixtureDB, [
+        'ios_token',
+        'android_token',
+        'refresh_token',
+        'img_avatar',
+      ]);
+      final email = "stephane@email.com";
+      final socialKey = "123";
+      final params = [email];
+      final socialType = 'facebook';
+      database.mockQuery(mockResults, params);
+      final userMap = jsonDecode(userFixtureDB);
+      final userExpected = User(
+        id: userMap['id'],
+        email: userMap['email'],
+        registerType: userMap['tipo_cadastro'],
+        iosToken: userMap['ios_token'],
+        androidToken: userMap['android_token'],
+        refreshToken: userMap['refresh_token'],
+        imageAvatar: userMap['img_avatar'],
+        supplierId: userMap['fornecedor_id'],
+      );
+
+      //Act
+      final user = await userRepository.loginByEmailSocialKey(
+          email, socialKey, socialType);
+
+      //Assert
+      expect(user, userExpected);
+      database.verifyQueryCalled(params: params);
+      database.verifyQueryNeverCalled(
+          params: [socialKey, socialType, userMap['id']]);
+      database.verifyConnectionClose();
+    });
+
+    test(
+        'Should login with email n social key with success and update social id',
+        () async {
+      //Arrange
+      final userFixtureDB = FixtureReader.getJsonData(
+          'modules/user/data/fixture/login_with_email_social_key.json');
+      final mockResults = MockResults(userFixtureDB, [
+        'ios_token',
+        'android_token',
+        'refresh_token',
+        'img_avatar',
+      ]);
+      final userMap = jsonDecode(userFixtureDB);
+      final email = "stephane@email.com";
+      final socialKey = "G123";
+      final socialType = 'google';
+      final paramsSelect = [email];
+      final paramsUpdate = <Object>[socialKey, 'google', userMap['id']];
+
+      database.mockQuery(mockResults, paramsSelect);
+      database.mockQuery(mockResults, paramsUpdate);
+
+      final userExpected = User(
+        id: userMap['id'],
+        email: userMap['email'],
+        registerType: userMap['tipo_cadastro'],
+        iosToken: userMap['ios_token'],
+        androidToken: userMap['android_token'],
+        refreshToken: userMap['refresh_token'],
+        imageAvatar: userMap['img_avatar'],
+        supplierId: userMap['fornecedor_id'],
+      );
+
+      //Act
+      final user = await userRepository.loginByEmailSocialKey(
+          email, socialKey, socialType);
+
+      //Assert
+      expect(user, userExpected);
+      database.verifyQueryCalled(params: paramsSelect);
+      database.verifyQueryCalled(params: paramsUpdate);
+      database.verifyConnectionClose();
+    });
+
+    test('Should login with email n social key n return UserNotFoundException',
+        () async {
+      //Arrange
+      final mockResults = MockResults();
+
+      final email = "stephane@email.com";
+      final socialKey = "G123";
+      final socialType = 'google';
+      final paramsSelect = [email];
+
+      database.mockQuery(mockResults, paramsSelect);
+
+      //Act
+      final call = userRepository.loginByEmailSocialKey;
+
+      //Assert
+      expect(() => call(email, socialKey, socialType),
+          throwsA(isA<UserNotfoundException>()));
+      await Future.delayed(Duration(seconds: 1));
+      database.verifyQueryCalled(params: paramsSelect);
+      database.verifyConnectionClose();
+    });
+
+    test('Should login with email n social key n return DatabaseException',
+        () async {
+      //Arrange
+      final email = "stephane@email.com";
+      final socialKey = "G123";
+      final socialType = 'google';
+      final paramsSelect = [email];
+
+      database.mockQueryException(params: paramsSelect);
+
+      //Act
+      final call = userRepository.loginByEmailSocialKey;
+
+      //Assert
+      expect(() => call(email, socialKey, socialType),
+          throwsA(isA<DatabaseException>()));
+      await Future.delayed(Duration(seconds: 1));
+      database.verifyQueryCalled(params: paramsSelect);
       database.verifyConnectionClose();
     });
   });

@@ -149,7 +149,7 @@ class UserRepository implements IUserRepository {
           iosToken: (dataMysql['ios_token'] as Blob?)?.toString(),
           androidToken: (dataMysql['android_token'] as Blob?)?.toString(),
           refreshToken: (dataMysql['refresh_token'] as Blob?)?.toString(),
-          imageAvatar: (dataMysql['img_token'] as Blob?)?.toString(),
+          imageAvatar: (dataMysql['img_avatar'] as Blob?)?.toString(),
           supplierId: dataMysql['fornecedor_id'],
         );
       }
