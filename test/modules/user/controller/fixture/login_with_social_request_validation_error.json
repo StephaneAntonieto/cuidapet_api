@@ -1,0 +1,6 @@
+{
+    "login": "stephane@email.com",
+    "social_login": true,
+    "avatar": "http://www.avatar.com/avatar.jpg",
+    "supplier_user": false
+}

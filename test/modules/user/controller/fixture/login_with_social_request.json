@@ -1,0 +1,8 @@
+{
+    "login": "stephane@email.com",
+    "social_login": true,
+    "avatar": "http://www.avatar.com/avatar.jpg",
+    "social_type": "facebok",
+    "social_key": "12312312",    
+    "supplier_user": false
+}
