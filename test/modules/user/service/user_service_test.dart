@@ -20,6 +20,7 @@ void main() {
     userRepository = MockUserRepository();
     log = MockLogger();
     userService = UserService(userRepository: userRepository, log: log);
+    registerFallbackValue(User());
   });
 
   group('Group test Login with email and password', () {
@@ -64,6 +65,67 @@ void main() {
       verify(() =>
               userService.loginWithEmailPassword(email, password, supplierUser))
           .called(1);
+    });
+  });
+
+  group('Group test login with social', () {
+    test('Should login with social success', () async {
+      //Arrange
+      final email = 'stephane@email.com';
+      final socialKey = '123';
+      final socialType = 'facebook';
+      final userReturnLogin = User(
+        id: 1,
+        email: email,
+        socialKey: socialKey,
+        registerType: socialType,
+      );
+
+      when(() => userRepository.loginByEmailSocialKey(
+              email, socialKey, socialType))
+          .thenAnswer((_) async => userReturnLogin);
+
+      //Act
+      final user =
+          await userService.loginWithSocial(email, '', socialType, socialKey);
+
+      //Assert
+      expect(user, userReturnLogin);
+      verify(
+        () =>
+            userRepository.loginByEmailSocialKey(email, socialKey, socialType),
+      ).called(1);
+    });
+
+    test('Should login with social user not found and create a new user',
+        () async {
+      //Arrange
+      final email = 'stephane@email.com';
+      final socialKey = '123';
+      final socialType = 'facebook';
+      final userCreated = User(
+        id: 1,
+        email: email,
+        socialKey: socialKey,
+        registerType: socialType,
+      );
+
+      when(() => userRepository.loginByEmailSocialKey(
+              email, socialKey, socialType))
+          .thenThrow(UserNotfoundException(message: 'Usuario nao encontrado'));
+
+      when(() => userRepository.createUser(any<User>()))
+          .thenAnswer((_) async => userCreated);
+
+      //Act
+      final user =
+          await userService.loginWithSocial(email, '', socialType, socialKey);
+
+      //Assert
+      expect(user, userCreated);
+      verify(() => userRepository.loginByEmailSocialKey(
+          email, socialKey, socialType)).called(1);
+      verify(() => userRepository.createUser(any<User>())).called(1);
     });
   });
 }
