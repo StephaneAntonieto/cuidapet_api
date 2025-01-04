@@ -90,7 +90,7 @@ Refer to the `db_model` directory for detailed information about the database sc
 
 5. **Run the API**:
     ```sh
-    dart run bin/server.dart
+    dart bin/server.dart
     ```
 
 6. **Access the API**:
