@@ -64,7 +64,7 @@ Refer to the `db_model` directory for detailed information about the database sc
 
 1. **Clone the Repository**:
     ```sh
-    git clone https://github.com/yourusername/cuidapet_api.git
+    git clone https://github.com/stephaneantonieto/cuidapet_api.git
     cd cuidapet_api
     ```
 
